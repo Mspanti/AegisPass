@@ -1,56 +1,68 @@
-NousGuard - Offline AI Mental Wellness Companion (Android Application)
-NousGuard is a robust and secure Android application designed to be an offline AI-powered companion for mental wellness. It integrates advanced AI capabilities for sentiment and intent detection directly on the device, ensuring complete privacy and accessibility without any cloud dependencies. With a focus on user security and a seamless offline experience, NousGuard provides a secure journaling system and real-time emotional support.
+AegisPass - Secure Password Manager (Android Application)
+AegisPass is a robust and highly secure Android application designed to help users manage their passwords safely and efficiently. Developed with a strong emphasis on data protection and user privacy, AegisPass stores passwords securely on the device using advanced encryption techniques and provides tools for assessing password strength and detecting data breaches.
 
 ✨ Features
-Offline AI-Powered Sentiment & Intent Detection: Integrates a hybrid AI pipeline (TensorFlow Lite + ONNX) to analyze user input and detect emotional sentiment and conversational intent without requiring an internet connection.
+Secure Password Storage:
 
-Biometric-Access Secured Journaling System: Provides a private and secure space for users to journal their thoughts and feelings, protected by biometric authentication.
+Passwords are encrypted using AES-256 encryption with a unique salt for each entry, ensuring maximum security.
 
-Multi-Layered Security Architecture: Implements comprehensive security measures including:
+The master password, which secures access to the application, is protected using jBCrypt hashing and stored securely in EncryptedSharedPreferences.
 
-Root/Jailbreak Detection: Prevents the app from running on compromised devices.
+All sensitive data resides on the device, never transmitted to external servers.
 
-App Tamper Detection: Ensures the app's integrity against unauthorized modifications.
+Digital Footprint & Risk Assessment:
 
-AES-256 Encryption: Securely encrypts sensitive user data (like journal entries) on the device.
+Analyzes password strength, identifies password reuse, and assesses password age to help users maintain strong and unique credentials.
 
-Optimized Mobile Performance: Utilizes model distillation and primitive type optimization techniques to ensure the AI models run efficiently on mobile devices with minimal resource consumption.
+Integrates with the HaveIBeenPwned API (in a privacy-preserving manner) to check for data breaches, alerting users if their accounts might be compromised.
 
-Zero Cloud Dependencies: All AI processing and data storage occur locally on the device, guaranteeing user privacy and full offline functionality.
+Advanced Security Mechanisms:
 
-Custom Synthetic Emotional Datasets: Models were trained using specially curated synthetic emotional datasets to enhance performance in sentiment and intent understanding.
+Root/Jailbreak Detection: Prevents the application from running on compromised devices, mitigating risks associated with insecure environments.
+
+App Tamper Detection: Verifies the integrity of the application package at runtime, protecting against unauthorized modifications.
+
+Code Obfuscation (ProGuard/R8): Applies obfuscation to the compiled code, making reverse engineering significantly more difficult.
+
+Secure Logging: Implements practices to prevent sensitive information from being inadvertently exposed through application logs.
+
+TLS Pinning: Ensures that the application only communicates with trusted servers by validating server certificates, preventing man-in-the-middle attacks.
 
 🚀 Technologies Used
-Language: Kotlin, Java
+Language: Kotlin
 
-AI/ML Frameworks: TensorFlow Lite (TFLite), ONNX (Open Neural Network Exchange)
+Platform: Android SDK (Native Development)
 
-Database: Room Persistence Library (for secure journaling)
+Database: Room Persistence Library (for secure local data storage)
 
-Security: AES-256 encryption, jBCrypt (for master password hashing), EncryptedSharedPreferences
+Encryption: AES-256, jBCrypt
 
-Development Environment: Android SDK (Native Development)
+API Integration: HaveIBeenPwned API
+
+Security Tools: ProGuard/R8
 
 🏗️ Architecture Overview
-NousGuard employs a hybrid on-device AI architecture. User input is processed through a pipeline that leverages both TensorFlow Lite and ONNX runtime for efficient sentiment and intent detection. This dual-framework approach ensures robust performance and flexibility in model deployment. All data processing and storage are handled locally, adhering to a strict privacy-by-design principle.
+AegisPass follows a clean Android architecture, leveraging Kotlin for robust and concise code. The Room Persistence Library is used for local database management, providing an abstraction layer over SQLite for secure and efficient data storage. Security features are deeply integrated into the application's core, ensuring that data is protected from creation to storage.
 
-🔒 Security Measures
-Security is paramount in NousGuard. The application incorporates several advanced mechanisms to protect user data and ensure app integrity:
+🔒 Security Deep Dive
+The security of your passwords is the highest priority for AegisPass:
 
-Data Encryption: All sensitive data, including journal entries and master password hashes, are encrypted using AES-256 with unique salts.
+Encryption at Rest: Each password entry is individually encrypted using AES-256 with a unique, cryptographically secure salt. This means even if the device storage is compromised, decrypting passwords without the master key is extremely difficult.
 
-Master Password Protection: The master password is secured using jBCrypt hashing and stored in EncryptedSharedPreferences.
+Master Password Hashing: Your master password is never stored directly. Instead, its jBCrypt hash is stored in EncryptedSharedPreferences, which itself is encrypted by the Android system.
 
-Device Integrity Checks: Implements sophisticated checks for rooted/jailbroken devices and detects any unauthorized tampering with the application package.
+On-Device Processing: All sensitive operations, including encryption/decryption and breach checks, are performed locally on your device. No password data ever leaves your device.
 
-ProGuard/R8: Code obfuscation is applied to enhance security against reverse engineering.
+Proactive Threat Detection: Root/Jailbreak detection and app tamper detection actively work to identify and prevent the app from running in potentially insecure environments.
+
+Secure API Interaction: TLS Pinning ensures that when checking against the HaveIBeenPwned API, the connection is always made to the legitimate server, preventing malicious intermediaries.
 
 ⚙️ Setup and Installation
-To set up and run NousGuard on your local machine:
+To get AegisPass running on your local machine:
 
 Clone the repository:
 
-git clone https://github.com/Mspanti/NousGuard.git
+git clone https://github.com/Mspanti/AegisPass.git
 
 Open in Android Studio:
 Navigate to the cloned directory and open the project in Android Studio.
@@ -61,10 +73,10 @@ Allow Gradle to sync and download all necessary dependencies.
 Build and Run:
 Connect an Android device or start an emulator and run the application.
 
-Note: This project involves pre-trained AI models. Ensure all necessary model files (e.g., TFLite, ONNX) are correctly placed in the app/src/main/assets folder as per the project structure.
+Note: You may need to configure API keys for the HaveIBeenPwned service if they are not already integrated into the build configuration. Refer to the project's local.properties or similar configuration files for details.
 
 🤝 Contributing
-Contributions are welcome! If you have suggestions for improvements or find any issues, please open an issue or submit a pull request.
+Contributions are welcome! If you have suggestions for improvements, new features, or find any issues, please feel free to open an issue or submit a pull request.
 
 📄 License
 This project is licensed under the MIT License. (Assuming MIT License, please replace with your actual license if different).
