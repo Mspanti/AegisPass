@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Search: This is a primary action that users will frequently look for.
+         Placing it as "ifRoom" ensures it's visible in the action bar if space allows,
+         providing quick access. -->
+    <item
+        android:id="@+id/action_search"
+        android:title="Search"
+        android:icon="@drawable/ic_search_24"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <!-- Private Safe: A core feature, but for a cleaner action bar, it's best placed
+         in the overflow menu. Users will likely navigate here from the main screen
+         or expect it in a more comprehensive menu. -->
+    <item
+        android:id="@+id/action_private_safe"
+        android:title="Private Safe"
+        android:icon="@drawable/ic_lock_24"
+        app:showAsAction="never" />
+
+    <!-- Digital Footprint: Similar to Private Safe, this is an important feature
+         that can reside in the overflow menu to keep the action bar uncluttered. -->
+    <item
+        android:id="@+id/action_digital_footprint"
+        android:title="Digital Footprint"
+        android:icon="@drawable/ic_security_24"
+        app:showAsAction="never" />
+
+    <!-- Settings: A standard menu item that is almost always placed in the overflow menu.
+         Users expect to find settings here. -->
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings_24"
+        app:showAsAction="never" />
+
+    <!-- Logout: This action should typically be placed at the very end of the menu
+         and within the overflow, as it's a final action for the user session. -->
+    <item
+        android:id="@+id/action_logout"
+        android:title="Logout"
+        android:icon="@drawable/ic_logout_24"
+        app:showAsAction="never" />
+
+</menu>

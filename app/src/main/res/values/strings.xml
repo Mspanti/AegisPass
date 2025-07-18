@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AegisPass</string>
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="master_password_setup_required">Master password not set. Please set it up.</string>
+</resources>

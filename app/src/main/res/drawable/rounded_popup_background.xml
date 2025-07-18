@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Solid color for the popup background. Using a Material 3 surface color. -->
+    <solid android:color="?attr/colorSurface" />
+
+    <!-- Rounded corners for the popup. Adjust radius as needed for your desired curve. -->
+    <corners android:radius="12dp" />
+
+    <!-- No stroke (border) to avoid the "inner box" effect around the popup itself. -->
+</shape>

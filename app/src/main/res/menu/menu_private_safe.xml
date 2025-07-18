@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_select"
+        android:title="Select"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_check_box_outline_black_24dp" /> <item
+    android:id="@+id/action_select_all"
+    android:title="Select All"
+    app:showAsAction="never"
+    android:visible="false" />
+
+    <item
+        android:id="@+id/action_remove_from_safe"
+        android:title="Remove from Safe"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_unarchive_black_24dp"
+        android:visible="false" /> <item
+    android:id="@+id/action_permanent_delete"
+    android:title="Permanent Delete"
+    app:showAsAction="ifRoom"
+    android:icon="@android:drawable/ic_menu_delete"
+    android:visible="false" />
+
+    <item
+        android:id="@+id/action_cancel_selection"
+        android:title="Cancel"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_close_black_24dp"
+        android:visible="false" /> <item
+    android:id="@+id/action_sort"
+    android:icon="@android:drawable/ic_menu_sort_by_size"
+    android:title="Sort By"
+    app:showAsAction="ifRoom">
+    <menu>
+        <item
+            android:id="@+id/sort_by_name_asc"
+            android:title="Name (A-Z)" />
+        <item
+            android:id="@+id/sort_by_name_desc"
+            android:title="Name (Z-A)" />
+        <item
+            android:id="@+id/sort_by_date_newest"
+            android:title="Date (Newest First)" />
+        <item
+            android:id="@+id/sort_by_date_oldest"
+            android:title="Date (Oldest First)" />
+        <item
+            android:id="@+id/sort_by_size_asc"
+            android:title="Size (Smallest First)" />
+        <item
+            android:id="@+id/sort_by_size_desc"
+            android:title="Size (Largest First)" />
+        <item
+            android:id="@+id/sort_by_type"
+            android:title="Type (Images then Videos)" />
+    </menu>
+</item>
+
+</menu>
