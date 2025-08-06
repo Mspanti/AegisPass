@@ -1,6 +1,4 @@
-![Screenshot_20250806_090928_AegisPass](https://github.com/user-attachments/assets/ef87dae8-f190-4225-8b95-08a6829e708a)
-![Screenshot_20250806_090858_AegisPass](https://github.com/user-attachments/assets/4e1d29d6-a93a-42ef-9846-962f1f28b7cf)
-![Screenshot_20250806_090757_AegisPass](https://github.com/user-attachments/assets/67952666-2bd6-40ad-8f2b-1b1cf368acab)
+
 AegisPass - Secure Password Manager (Android Application)
 AegisPass is a robust and highly secure Android application designed to help users manage their passwords safely and efficiently. Developed with a strong emphasis on data protection and user privacy, AegisPass stores passwords securely on the device using advanced encryption techniques and provides tools for assessing password strength and detecting data breaches.
 
@@ -83,3 +81,11 @@ Contributions are welcome! If you have suggestions for improvements, new feature
 
 📄 License
 This project is licensed under the MIT License. (Assuming MIT License, please replace with your actual license if different).
+
+
+Project Screnn Shots:
+![Screenshot_20250806_090928_AegisPass](https://github.com/user-attachments/assets/ef87dae8-f190-4225-8b95-08a6829e708a)
+![Screenshot_20250806_090858_AegisPass](https://github.com/user-attachments/assets/4e1d29d6-a93a-42ef-9846-962f1f28b7cf)
+![Screenshot_20250806_090757_AegisPass](https://github.com/user-attachments/assets/67952666-2bd6-40ad-8f2b-1b1cf368acab)
+<img width="465" height="1042" alt="Screenshot 2025-07-20 193950" src="https://github.com/user-attachments/assets/c38d7855-b185-4ddb-9ee1-328cc81f3028" />
+
