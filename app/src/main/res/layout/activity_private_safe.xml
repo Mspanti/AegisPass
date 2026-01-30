@@ -13,17 +13,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.AegisPass.AppBarOverlay"
+        app:elevation="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="wrap_content"
+            android:minHeight="72dp"
+            android:background="@drawable/bg_toolbar_integrated"
+            app:titleTextAppearance="@style/TextAppearance.AegisPass.HeadlineMedium"
             app:popupTheme="@style/Theme.AegisPass.PopupOverlay"
-            app:titleTextColor="?attr/colorOnPrimary"
+            app:titleTextColor="?attr/colorOnSurface"
             app:navigationIcon="@drawable/ic_arrow_back_24"
-            app:navigationIconTint="?attr/colorOnPrimary"
+            app:navigationIconTint="?attr/colorOnSurface"
             app:title="Private Safe" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -52,7 +55,7 @@
             android:layout_weight="1"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
+            app:spanCount="2"
             tools:listitem="@layout/item_private_media" />
 
         <TextView
@@ -69,18 +72,19 @@
 
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/addMediaFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:clickable="true"
-        android:focusable="true"
+        android:text="Add"
+        app:icon="@drawable/ic_add_24"
+        app:iconTint="?attr/colorOnPrimary"
+        android:textColor="?attr/colorOnPrimary"
+        app:backgroundTint="?attr/colorPrimary"
+        app:shapeAppearance="@style/ShapeRoundedLarge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_add_24"
-        app:tint="?attr/colorOnPrimaryContainer"
-        app:backgroundTint="?attr/colorPrimaryContainer"
         android:contentDescription="Add media to private safe" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

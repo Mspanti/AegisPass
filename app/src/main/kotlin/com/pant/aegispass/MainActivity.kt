@@ -122,6 +122,16 @@ class MainActivity : AppCompatActivity() {
 
         (application as AegisPassApplication).activityResumed()
 
+        // Start fingerprint pulse animation if the button is visible and using an animated vector
+        try {
+            val icon = binding.fingerprintLoginButton.icon
+            if (binding.fingerprintLoginButton.visibility == View.VISIBLE && icon is android.graphics.drawable.Animatable) {
+                (icon as android.graphics.drawable.Animatable).start()
+            }
+        } catch (e: Exception) {
+            // Ignore animation errors; animation is cosmetic
+        }
+
         // IMPORTANT: Do NOT re-direct to SetupPasswordActivity from here if it's already the primary login screen.
         // The check and redirection should primarily happen in onCreate or when the app is launched.
         // If user is already on MainActivity (login screen), they should just login here.

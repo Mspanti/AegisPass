@@ -29,16 +29,26 @@ class PasswordEntryAdapter(
         private var isPasswordVisible = false
 
         init {
-            binding.optionsMenuButton.setOnClickListener { view -> // Corrected reference
+            binding.optionsMenuButton.setOnClickListener { view ->
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     showOptionsMenu(view, getItem(position))
                 }
             }
 
-            // Click listener for the entire card to toggle password visibility
-            binding.passwordCardView.setOnClickListener { // Corrected reference
-                isPasswordVisible = !isPasswordVisible
+            // Copy password when tapping the copy icon
+            binding.copyPasswordButton.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    copyDecryptedPasswordToClipboard(binding.root.context, getItem(position))
+                }
+            }
+
+            // Toggle visibility when tapping the eye icon or the password text
+            binding.showHidePasswordButton.setOnClickListener {
+                togglePasswordVisibility()
+            }
+            binding.passwordMaskedTextView.setOnClickListener {
                 togglePasswordVisibility()
             }
         }
@@ -46,29 +56,45 @@ class PasswordEntryAdapter(
         fun bind(passwordEntry: PasswordEntry) {
             binding.serviceNameTextView.text = passwordEntry.serviceName
             binding.usernameTextView.text = passwordEntry.username
-            // Reset visibility state when binding new data
+            // Reset state
             isPasswordVisible = false
-            togglePasswordVisibility()
+            binding.passwordMaskedTextView.text = "••••••••••"
+            binding.decryptionErrorIcon.visibility = View.GONE
+            binding.decryptionErrorTextView.visibility = View.GONE
+            binding.showHidePasswordButton.setImageResource(R.drawable.ic_visibility_24)
         }
 
         private fun togglePasswordVisibility() {
-            if (isPasswordVisible) {
+            val pos = adapterPosition
+            if (pos == RecyclerView.NO_POSITION) return
+            val entry = getItem(pos)
+
+            if (!isPasswordVisible) {
                 try {
                     val decryptedPassword = PasswordCipher.decrypt(
-                        getItem(adapterPosition).encryptedPassword,
+                        entry.encryptedPassword,
                         masterPassword,
-                        Base64.decode(getItem(adapterPosition).entrySalt, Base64.DEFAULT)
+                        Base64.decode(entry.entrySalt, Base64.DEFAULT)
                     )
-                    binding.passwordMaskedTextView.text = decryptedPassword // Corrected reference
-                    binding.showHidePasswordButton.setImageResource(R.drawable.ic_visibility_off_24) // Corrected reference
+                    binding.passwordMaskedTextView.text = decryptedPassword
+                    binding.decryptionErrorIcon.visibility = View.GONE
+                    binding.decryptionErrorTextView.visibility = View.GONE
+                    binding.showHidePasswordButton.setImageResource(R.drawable.ic_visibility_off_24)
+                    isPasswordVisible = true
                 } catch (e: Exception) {
-                    binding.passwordMaskedTextView.text = "Decryption Error" // Corrected reference
-                    binding.showHidePasswordButton.setImageResource(R.drawable.ic_visibility_24) // Corrected reference
-                    Toast.makeText(binding.root.context, "Failed to decrypt. Master password might be incorrect.", Toast.LENGTH_SHORT).show()
+                    // Show subtle error state
+                    binding.decryptionErrorIcon.visibility = View.VISIBLE
+                    binding.decryptionErrorTextView.visibility = View.VISIBLE
+                    binding.passwordMaskedTextView.text = "••••••••••"
+                    binding.showHidePasswordButton.setImageResource(R.drawable.ic_visibility_24)
+                    isPasswordVisible = false
                 }
             } else {
-                binding.passwordMaskedTextView.text = "••••••••••" // Corrected reference
-                binding.showHidePasswordButton.setImageResource(R.drawable.ic_visibility_24) // Corrected reference
+                binding.passwordMaskedTextView.text = "••••••••••"
+                binding.showHidePasswordButton.setImageResource(R.drawable.ic_visibility_24)
+                isPasswordVisible = false
+                binding.decryptionErrorIcon.visibility = View.GONE
+                binding.decryptionErrorTextView.visibility = View.GONE
             }
         }
 

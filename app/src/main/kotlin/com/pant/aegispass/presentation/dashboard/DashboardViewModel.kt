@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
@@ -25,6 +26,16 @@ class DashboardViewModel(
             is DashboardIntent.DeletePassword -> deleteById(intent.id)
             is DashboardIntent.Refresh -> loadPasswords()
         }
+    }
+
+    fun togglePasswordVisibility(entryId: Long) {
+        val currentSet = _state.value.unhiddenPasswordIds
+        val newSet = if (currentSet.contains(entryId)) {
+            currentSet - entryId
+        } else {
+            currentSet + entryId
+        }
+        _state.update { it.copy(unhiddenPasswordIds = newSet) }
     }
 
     private fun loadPasswords() {

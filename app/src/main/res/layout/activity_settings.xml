@@ -12,17 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.AegisPass.AppBarOverlay"
+        app:elevation="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/bg_toolbar_integrated"
             app:popupTheme="@style/Theme.AegisPass.PopupOverlay"
-            app:titleTextColor="?attr/colorOnPrimary"
+            app:titleTextColor="?attr/colorOnSurface"
             app:navigationIcon="@drawable/ic_arrow_back_24"
-            app:navigationIconTint="?attr/colorOnPrimary"
+            app:navigationIconTint="?attr/colorOnSurface"
             app:title="Settings" />
 
     </com.google.android.material.appbar.AppBarLayout>

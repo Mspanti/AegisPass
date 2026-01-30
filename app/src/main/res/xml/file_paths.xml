@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- This must match your private safe directory -->
-    <files-path
-        name="private_media"
-        path="private_media/" />
+<paths>
+    <files-path name="my_private_files" path="." />
+
+    <files-path name="private_safe" path="private_safe/" />
 </paths>

@@ -33,4 +33,11 @@
         <item name="android:textColor">@color/md_theme_onSurface</item>
     </style>
 
+    <style name="Widget.AegisPass.Toolbar.Integrated" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
+        <item name="shapeAppearanceOverlay">@style/ShapeToolbarBottomRounded24</item>
+        <item name="android:background">@drawable/bg_toolbar_integrated</item>
+        <item name="android:elevation">0dp</item>
+        <item name="titleTextColor">?attr/colorOnSurface</item>
+    </style>
+
 </resources>
