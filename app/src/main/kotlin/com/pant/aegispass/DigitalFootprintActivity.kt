@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pant.aegispass.databinding.ActivityDigitalFootprintBinding
+import com.pant.aegispass.data.local.AppDatabase
+import com.pant.aegispass.data.local.PasswordDao
+import com.pant.aegispass.data.local.PasswordEntry
+import com.pant.aegispass.core.security.PasswordCipher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -74,7 +78,9 @@ class DigitalFootprintActivity : AppCompatActivity() {
                     binding.digitalFootprintRecyclerView.visibility = View.VISIBLE
                     binding.riskSummaryTextView.visibility = View.VISIBLE
 
-                    val entriesWithRisk = passwordList.map { entry ->
+                    val riskUseCase = com.pant.aegispass.domain.usecase.RiskAssessmentUseCase()
+                    val entriesWithRisk = mutableListOf<com.pant.aegispass.RiskAssessor.PasswordRisk>()
+                    for (entry in passwordList) {
                         val decryptedPassword = try {
                             PasswordCipher.decrypt(
                                 entry.encryptedPassword,
@@ -84,7 +90,8 @@ class DigitalFootprintActivity : AppCompatActivity() {
                         } catch (e: Exception) {
                             "DECRYPTION_ERROR" // Handle decryption errors
                         }
-                        RiskAssessor.assessRisk(entry, decryptedPassword, passwordList)
+                        val risk = riskUseCase(entry, decryptedPassword, passwordList)
+                        entriesWithRisk.add(risk)
                     }
 
                     // Sort by risk score (highest risk first)

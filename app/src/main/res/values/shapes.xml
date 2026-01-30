@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Corner radius styles for components -->
+    <style name="ShapeRoundedLarge" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerSize">32dp</item>
+    </style>
+
+    <style name="ShapeRoundedMedium" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="ShapeRoundedSmall" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerSize">16dp</item>
+    </style>
+</resources>

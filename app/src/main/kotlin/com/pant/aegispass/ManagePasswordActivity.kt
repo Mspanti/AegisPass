@@ -11,6 +11,10 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pant.aegispass.databinding.ActivityManagePasswordBinding
+import com.pant.aegispass.data.local.AppDatabase
+import com.pant.aegispass.data.local.PasswordDao
+import com.pant.aegispass.data.local.PasswordEntry
+import com.pant.aegispass.core.security.PasswordCipher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

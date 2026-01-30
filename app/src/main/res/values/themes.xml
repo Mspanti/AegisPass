@@ -41,16 +41,24 @@
         <item name="colorOutlineVariant">@color/md_theme_outlineVariant</item>
 
         <!-- Status bar color -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSurfaceVariant</item>
+        <item name="android:statusBarColor">@color/md_theme_surface</item>
+
+        <!-- Shape system: rounded corners for components (Glass-Material Hybrid) -->
+        <item name="shapeAppearanceLargeComponent">@style/ShapeRoundedLarge</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeRoundedMedium</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeRoundedSmall</item>
+
+        <!-- Use outlined cards (1dp stroke) instead of heavy shadows -->
+        <item name="materialCardViewStyle">@style/Widget.AegisPass.MaterialCard</item>
 
         <!-- Custom style for PopupMenu with rounded corners -->
         <item name="popupMenuBackground">@drawable/rounded_popup_background</item>
 
-        <!-- Explicitly set text colors for better visibility in light theme -->
-        <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:textColorSecondary">@color/grey_700</item>
-        <item name="android:textColorHint">@color/grey_500</item>
-        <item name="android:textColor">@color/black</item>
+        <!-- Text colors tuned for deep surface background -->
+        <item name="android:textColorPrimary">@color/md_theme_onSurface</item>
+        <item name="android:textColorSecondary">@color/md_theme_onSurfaceVariant</item>
+        <item name="android:textColorHint">@color/md_theme_onSurfaceVariant</item>
+        <item name="android:textColor">@color/md_theme_onSurface</item>
     </style>
 
     <style name="Theme.AegisPass.NoActionBar" parent="Theme.AegisPass">

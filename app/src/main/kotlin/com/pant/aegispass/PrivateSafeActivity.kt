@@ -33,6 +33,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pant.aegispass.databinding.ActivityPrivateSafeBinding
+import com.pant.aegispass.presentation.privatesafe.PrivateSafeViewModel
+import com.pant.aegispass.presentation.privatesafe.PrivateSafeViewModelFactory
+import com.pant.aegispass.presentation.privatesafe.PrivateSafeIntent
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -51,6 +55,9 @@ class PrivateSafeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPrivateSafeBinding
     private lateinit var adapter: PrivateMediaAdapter
     private val privateMediaList = mutableListOf<PrivateMediaItem>()
+
+    // ViewModel for MVI-driven UI
+    private lateinit var viewModel: PrivateSafeViewModel
 
     private var pendingDeleteUri: Uri? = null
     private var isSelectionModeActive: Boolean = false
@@ -105,32 +112,11 @@ class PrivateSafeActivity : AppCompatActivity() {
                     return@registerForActivityResult
                 }
 
-                currentMoveJob = lifecycleScope.launch {
-                    showProgressDialog("Moving files to Private Safe...", urisToMove.size)
-                    var successCount = 0
-                    var failCount = 0
-
-                    for ((index, uri) in urisToMove.withIndex()) {
-                        try {
-                            moveMediaToPrivateSafe(uri)
-                            successCount++
-                        } catch (e: Exception) {
-                            Log.e("AegisPass", "Failed to move file to private safe: $uri", e)
-                            failCount++
-                        }
-                        withContext(Dispatchers.Main) {
-                            progressDialog?.progress = index + 1
-                        }
-                    }
-                    hideProgressDialog()
-                    if (successCount > 0) {
-                        Toast.makeText(this@PrivateSafeActivity, "$successCount file(s) moved to Private Safe. $failCount failed.", Toast.LENGTH_LONG).show()
-                    } else if (failCount > 0) {
-                        Toast.makeText(this@PrivateSafeActivity, "Failed to move any files. Check logs.", Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(this@PrivateSafeActivity, "No files selected.", Toast.LENGTH_SHORT).show()
-                    }
-                    loadPrivateMedia() // Reload media after batch operation
+                // Delegate moving logic to ViewModel / MediaRepository via FileMoveUseCase
+                for (uri in urisToMove) {
+                    val ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri))
+                    val fileName = "private_${System.currentTimeMillis()}${if (ext != null) "." + ext else ""}"
+                    viewModel.handle(PrivateSafeIntent.MoveToPrivate(uri, fileName))
                 }
             }
         }
@@ -212,6 +198,23 @@ class PrivateSafeActivity : AppCompatActivity() {
         binding.privateMediaRecyclerView.layoutManager = GridLayoutManager(this, 3)
         binding.privateMediaRecyclerView.adapter = adapter
 
+        // Instantiate ViewModel with factory
+        val factory = PrivateSafeViewModelFactory(this)
+        viewModel = ViewModelProvider(this, factory).get(PrivateSafeViewModel::class.java)
+
+        // Observe ViewModel state and update UI
+        lifecycleScope.launchWhenStarted {
+            viewModel.state.collect { st ->
+                privateMediaList.clear()
+                privateMediaList.addAll(st.items.map {
+                    val isVideo = listOf("mp4","mov","avi","mkv","webm").any { ext -> it.fileName.endsWith(".$ext", ignoreCase = true) }
+                    PrivateMediaItem(it.fileName, it.filePath, isVideo)
+                })
+                adapter.notifyDataSetChanged()
+                updateNoMediaMessage()
+            }
+        }
+
         binding.addMediaFab.setOnClickListener {
             // Prevent adding media if another operation is active
             if (currentMoveJob?.isActive == true || currentRemoveJob?.isActive == true || currentDeleteJob?.isActive == true) {
@@ -223,6 +226,7 @@ class PrivateSafeActivity : AppCompatActivity() {
             }
         }
 
+        // Load via ViewModel
         loadPrivateMedia()
         createNotificationChannel()
     }
@@ -823,40 +827,8 @@ class PrivateSafeActivity : AppCompatActivity() {
     }
 
     private fun loadPrivateMedia() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val privateDir = getPrivateMediaDir()
-            val mediaFiles = privateDir.listFiles { file: File ->
-                file.isFile && !file.name.startsWith(".")
-            }
-
-            val loadedMedia = mediaFiles?.map { file: File ->
-                val isVideo = file.extension.equals("mp4", ignoreCase = true) ||
-                        file.extension.equals("mov", ignoreCase = true) ||
-                        file.extension.equals("avi", ignoreCase = true) ||
-                        file.extension.equals("mkv", ignoreCase = true) ||
-                        file.extension.equals("webm", ignoreCase = true)
-
-                PrivateMediaItem(file.name, file.absolutePath, isVideo)
-            }?.toMutableList() ?: mutableListOf()
-
-            // Apply sorting based on currentSortOrder
-            val sortedList = when (currentSortOrder) {
-                MediaSortOrder.NAME_ASC -> loadedMedia.sortedBy { it.fileName.lowercase() }
-                MediaSortOrder.NAME_DESC -> loadedMedia.sortedByDescending { it.fileName.lowercase() }
-                MediaSortOrder.DATE_NEWEST -> loadedMedia.sortedByDescending { File(it.filePath).lastModified() }
-                MediaSortOrder.DATE_OLDEST -> loadedMedia.sortedBy { File(it.filePath).lastModified() }
-                MediaSortOrder.SIZE_ASC -> loadedMedia.sortedBy { File(it.filePath).length() }
-                MediaSortOrder.SIZE_DESC -> loadedMedia.sortedByDescending { File(it.filePath).length() }
-                MediaSortOrder.TYPE -> loadedMedia.sortedWith(compareBy<PrivateMediaItem> { if (it.isVideo) 1 else 0 }.thenBy { it.fileName.lowercase() })
-            }
-
-            withContext(Dispatchers.Main) {
-                privateMediaList.clear()
-                privateMediaList.addAll(sortedList) // Add sorted list
-                adapter.notifyDataSetChanged()
-                updateNoMediaMessage()
-            }
-        }
+        // Delegate loading to ViewModel (it will update state which we observe)
+        viewModel.handle(PrivateSafeIntent.LoadGallery)
     }
 
     private fun updateNoMediaMessage() {

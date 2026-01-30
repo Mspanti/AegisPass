@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pant.aegispass.databinding.ItemPasswordEntryBinding
+import com.pant.aegispass.data.local.PasswordEntry
+import com.pant.aegispass.core.security.PasswordCipher
 
 class PasswordEntryAdapter(
     private val masterPassword: String,

@@ -8,9 +8,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
+import com.pant.aegispass.presentation.dashboard.DashboardViewModelFactory
+import com.pant.aegispass.presentation.dashboard.DashboardViewModel
+import com.pant.aegispass.presentation.dashboard.DashboardIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pant.aegispass.databinding.ActivityDashboardBinding
+import com.pant.aegispass.data.local.AppDatabase
+import com.pant.aegispass.data.local.PasswordDao
+import com.pant.aegispass.data.local.PasswordEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,6 +30,9 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var passwordAdapter: PasswordEntryAdapter
     private var allPasswords: List<PasswordEntry> = emptyList()
 
+    // ViewModel
+    private lateinit var dashboardViewModel: com.pant.aegispass.presentation.dashboard.DashboardViewModel
+
     // Get the custom Application instance
     private val aegisPassApplication: AegisPassApplication
         get() = application as AegisPassApplication
@@ -34,8 +44,6 @@ class DashboardActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = "My Passwords"
-
-        passwordDao = AppDatabase.getDatabase(applicationContext).passwordDao()
 
         masterPasswordForDecryption = SessionManager.getMasterPassword()
             ?: run {
@@ -64,7 +72,16 @@ class DashboardActivity : AppCompatActivity() {
             adapter = passwordAdapter
         }
 
-        observePasswords()
+        // ViewModel + MVI wiring
+        val factory = DashboardViewModelFactory(this)
+        dashboardViewModel = ViewModelProvider(this, factory).get(DashboardViewModel::class.java)
+        lifecycleScope.launchWhenStarted {
+            dashboardViewModel.state.collect { st ->
+                passwordAdapter.submitList(st.passwords)
+                updateEmptyView(st.passwords.isEmpty())
+            }
+        }
+        dashboardViewModel.handle(DashboardIntent.LoadPasswords)
 
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -184,12 +201,9 @@ class DashboardActivity : AppCompatActivity() {
             .setTitle("Delete Password Entry")
             .setMessage("Are you sure you want to delete the entry for ${entry.serviceName} (${entry.username})?")
             .setPositiveButton("DELETE") { dialog, _ ->
-                lifecycleScope.launch(Dispatchers.IO) {
-                    passwordDao.delete(entry)
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@DashboardActivity, "Entry deleted.", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                // Use ViewModel to handle delete via use case
+                dashboardViewModel.handle(DashboardIntent.DeletePassword(entry.id))
+                Toast.makeText(this@DashboardActivity, "Entry delete requested.", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
             .setNegativeButton("CANCEL") { dialog, _ ->
