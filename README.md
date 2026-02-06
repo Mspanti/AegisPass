@@ -83,7 +83,7 @@ Contributions are welcome! If you have suggestions for improvements, new feature
 This project is licensed under the MIT License. (Assuming MIT License, please replace with your actual license if different).
 
 
-Project Screnn Shots:
+Project Screen Shots:
 <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
 
   <img src="https://github.com/user-attachments/assets/ef87dae8-f190-4225-8b95-08a6829e708a" width="200" />
